@@ -1,5 +1,7 @@
 package com.example.ainai2
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
@@ -12,6 +14,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
@@ -64,6 +67,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -80,10 +84,20 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             // A surface container using the 'background' color from the theme
             Surface(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+
+
+                        // Launch CameraActivity using Intent
+                        val intent = Intent(this@MainActivity, Camera::class.java)
+                        startActivity(intent)
+                    },
+
                 color = MaterialTheme.colorScheme.background
             ) {
 
@@ -93,31 +107,21 @@ class MainActivity : ComponentActivity() {
 
         }
 
-//        lifecycleScope.launch {
-//            delay(50)
-//            window.setBackgroundDrawableResource(android.R.color.transparent)
-//        }
 
-
-
-  }
+    }
 }
+
 @Preview
 @Composable
-fun navigation(){
-    val navController= rememberNavController()
-    NavHost(navController = navController, startDestination = "splash_screen" ){
-        composable("splash_screen"){
+fun navigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "splash_screen") {
+        composable("splash_screen") {
 
             splash_screen(navController = navController)
 
         }
 
-        composable("main_screen"){
-
-            Text(text = "camera", color= Color.Black)
-
-        }
     }
 
 }
@@ -128,47 +132,38 @@ fun splash_screen(navController: NavController) {
 
 
     val gradientBrush = Brush.verticalGradient(
-        colors = listOf( Color.White,baby_blue), // Gradient colors
+        colors = listOf(Color.White, baby_blue), // Gradient colors
         startY = 500f, // Starting Y position of the gradient
-        endY =5000f // Ending Y position of the gradient
+        endY = 5000f // Ending Y position of the gradient
     )
     var logoOffsetY by remember { mutableStateOf(0f) }
     val scale = remember { Animatable(0f) }
 
-   Box( modifier = Modifier
-       .fillMaxSize()
-       .background(brush = gradientBrush))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = gradientBrush)
+
+    )
 
     LaunchedEffect(true) {
-        scale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = {
-                    OvershootInterpolator(3f).getInterpolation(it)
+        scale.animateTo(targetValue = 1f, animationSpec = tween(durationMillis = 500, easing = {
+            OvershootInterpolator(3f).getInterpolation(it)
 
-                }
-            )
-        )
+        }))
 
-
-
-        delay(30000L)
-        navController.navigate("main_screen")
 
     }
 
 
     Box(
-        contentAlignment = Alignment.TopCenter,
-        modifier = Modifier
+        contentAlignment = Alignment.TopCenter, modifier = Modifier
             .fillMaxSize()
             .padding(90.dp)
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.vine),
-            contentDescription = "logo",
+            painter = painterResource(id = R.drawable.vine), contentDescription = "logo",
             // contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(170.dp)
@@ -181,12 +176,10 @@ fun splash_screen(navController: NavController) {
 
 
     Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
+        contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()
 
     ) {
-        val fonts= FontFamily(
+        val fonts = FontFamily(
             Font(R.font.gulzar_regular)
 
 
@@ -196,8 +189,8 @@ fun splash_screen(navController: NavController) {
             text = "هذا الذي بين يديك سيكون عيناك، وستكون \n         أذن له،نتمنى لك قضاء وقت ممتع",
             fontSize = 25.sp,
             fontWeight = FontWeight.ExtraBold,/// Increase the font size to 24.sp or any other desired value
-          color=Color.DarkGray,
-            fontFamily= fonts,
+            color = Color.DarkGray,
+            fontFamily = fonts,
 
             modifier = Modifier
 
@@ -207,43 +200,8 @@ fun splash_screen(navController: NavController) {
             )
     }
 
-    /*  Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            // Increase the area of the text horizontally using Modifier
-            Text(
-                text = "هذا الذي بين يديك سيكون عيناك، وستكون أذن له",
-                fontSize = 20.sp,
-                modifier = Modifier.fillMaxWidth().graphicsLayer(scaleX = scale.value, scaleY = scale.value)
-            )
-        }
-    }*/
 
-
-    /*  val offset = Offset(5.0f, 10.0f)
-  Text(
-      text = "Hello world!",
-      modifier = Modifier
-          .size(500.dp)
-          .graphicsLayer(scaleX = scale.value, scaleY = scale.value),
-      style = TextStyle(
-          fontSize = 24.sp,
-          shadow = Shadow(
-              color = Color.Blue, offset = offset, blurRadius = 3f
-          )
-      )
-  )/*
-
- */*/
-
-
-
-
-
-    }
+}
 
 
 

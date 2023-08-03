@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.Ainai2" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.JetML" parent="Theme.MaterialComponents.DayNight.DarkActionBar"/>
+    <style name="Theme.JetML.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
